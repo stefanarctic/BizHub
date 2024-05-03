@@ -31,6 +31,7 @@ const Navbar = () => {
         const navLinks = document.querySelectorAll("#nav-list li a")
         const sections = [$('header'), ...document.querySelectorAll('section')]
         navLinks[0].classList.add("selected")
+        // document.getElementById('logo-container').scrollTo();
         window.onscroll = _ => {
             sections.forEach(sec => {
                 let top = window.scrollY + 1
@@ -41,13 +42,13 @@ const Navbar = () => {
                 if (top >= offset && top < offset + height) {
                     navLinks.forEach(link => {
                         link.classList.remove('selected')
-                        document.querySelector(`#nav-list li a[href="#${id}"`).classList.add('selected')
+                        document.querySelector(`#nav-list li a[href="/#${id}"`).classList.add('selected')
                     })
                 }
                 // header += main fix
                 if (top < 570) {
-                    document.querySelector(`#nav-list li a[href="#about"`).classList.remove('selected')
-                    document.querySelector(`#nav-list li a[href="#home"`).classList.add('selected')
+                    document.querySelector(`#nav-list li a[href="/#about"`).classList.remove('selected')
+                    document.querySelector(`#nav-list li a[href="/#home"`).classList.add('selected')
                 }
             })
         }
@@ -55,13 +56,13 @@ const Navbar = () => {
 
     return (
         <nav>
-            <div id="logo-container"><span>BizHub</span></div>
+            <div id="logo-container"><span><a href="/">BizHub</a></span></div>
             <div id="nav-container">
                 <ul id="nav-list">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#benefits">Benefits</a></li>
-                    <li><a href="#launch-app">Launch App</a></li>
+                    <li><a href="/#home">Home</a></li>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/#benefits">Benefits</a></li>
+                    <li><a href="/app">Launch App</a></li>
                 </ul>
                 <div id="nav-mobile"><a id="burger-menu" data-href="#"><span></span></a></div>
             </div>

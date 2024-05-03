@@ -30,6 +30,11 @@ header {
                 font-size: 1.8em; // fixed-size!
                 font-weight: bold;
                 color: var(--color1);
+            
+            cursor: pointer;
+            a {
+                all: unset !important;
+            }
         }
 
         #nav-container {
