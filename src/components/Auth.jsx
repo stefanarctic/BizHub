@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { auth } from "../firebase/FirebaseSetup";
 import { useNavigate } from "react-router-dom";
-import SignInWithGoogleButton from "./SignInWithGoogleButton";
 
 // export const logOut = (callback, error) => {
 //     signOut(auth).then(callback).catch(error);
@@ -46,7 +45,7 @@ const Auth = () => {
             .then(e => {
                 console.log(`Signed in with Google as ${e.user.displayName}`);
                 navigate('/app');
-                setShowButtonF(false);
+                // setShowButtonF(false);
             })
             .catch(error => {
                 console.error(error);
