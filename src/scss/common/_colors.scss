@@ -4,17 +4,20 @@
 
 
 :root {
-    --primary-color: rgb(11, 255, 255);
-    --secondary-color: #202337;
+    // --primary-color: rgb(11, 255, 255);
+    --primary-color: rgb(190, 49, 68);
+    --secondary-color: rgb(34, 9, 44);
+    // --secondary-color: rgb(32, 35, 55);
     --accent-color: rgb(173, 19, 211);
 
     --font-color: #fff;
-    --bg-color: #0A0B0F;
+    --bg-color: rgb(10, 11, 15);
     --shadow-color: rgba(11, 255, 255, 0.63);
     --shadow-color-2: rgba(173, 19, 211, 0.774);
 
     // General Colors
     --white-color:#fff;
+    // --white-color: rgb(34, 9, 44);
     --gray-color: #9b9b9b;
     --black-color:#000;
     --transparent-bg-color: #02020217;

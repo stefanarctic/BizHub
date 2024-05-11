@@ -60,30 +60,7 @@ const Auth = () => {
             console.log(auth.currentUser);
         }
         console.log('Entered login page');
-        // setShowButtonF(true);
-
-        // location.reload();
-        // if (!ran) {
-        //     // location.reload();
-        //     setRan(true);
-        // }
-
-        // setRefreshButtonState(refreshButtonState + 1);
     }, []);
-
-    // useEffect(() => {
-    //     console.log('Component refreshed');
-    //     setShowLoginButton(true);
-    // }, [ran]);
-
-    // useRunOnce({
-    //     fn: () => {
-    //         setRefreshButtonState(refreshButtonState + 1);
-    //     }
-    // });
-
-    // let signInWithGoogleButton = <SignInWithGoogleButton signInWithGoogle={signInWithGoogle} />;
-    // signInWithGoogleButton.props
 
     return (
         <>

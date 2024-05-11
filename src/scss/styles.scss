@@ -27,6 +27,11 @@
 @import "./components/bg-video";
 
 
-// - index.html
+// Landing page
 @import "./pc";
+// Auth page
+@import "./components/auth.scss";
+// Chat app
+@import "./components/chat/chat.scss";
+
 @import "./mq";

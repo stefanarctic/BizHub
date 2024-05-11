@@ -1,0 +1,58 @@
+
+.chat {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: black;
+    flex: 1;
+    width: 95vw;
+    outline: 1px solid #dddddd35;
+
+    .workspace-section {
+
+        outline: 1px solid #dddddd35;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .workspace-title {
+
+            outline: 1px solid #dddddd35;
+            display: flex;
+            justify-content: left;
+            padding-left: 20px;
+            h1 {
+                // all: unset;
+                font-size: 25px;
+                font-weight: bolder;
+            }
+
+        }
+
+        .list {
+            flex: 1;
+            display: flex;
+            justify-content: row;
+            gap: 20px;
+    
+            .section-selector {
+                flex: 1;
+                outline: 1px solid #dddddd35;
+            }
+    
+            .conversation-selector {
+                flex: 4;
+                outline: 1px solid #dddddd35;
+            }
+        }
+
+    }
+
+    .workspace-section .list, .messages {
+        padding-top: 20px;
+    }
+
+    .messages {
+        flex: 2;
+        outline: 1px solid #dddddd35;
+    }
+}

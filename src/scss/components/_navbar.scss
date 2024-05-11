@@ -1,7 +1,14 @@
+
+$background-image: "../images/background/red_background.jpg";
+
 header {
     max-width: 100%;
     position: relative;
-    @include ele-bg($url: "https://w.wallhaven.cc/full/85/wallhaven-85kpek.jpg");
+    // @include ele-bg($url: "https://w.wallhaven.cc/full/85/wallhaven-85kpek.jpg");
+    // @include ele-bg($url: "https://img.freepik.com/free-vector/royal-watercolor-valentine-red-background_1340-4006.jpg?w=740&t=st=1715268525~exp=1715269125~hmac=80a9cf6a6491ed647008ae51756e8f3caec116eb97afb630c1cec6eaea44cd80");
+
+
+    @include ele-bg($url: $background-image);
     // filter: brightness(50%);
 
 
@@ -15,7 +22,8 @@ header {
             top: 0;
             left: 0;
         // background: transparent;
-        @include ele-bg($url: "https://w.wallhaven.cc/full/85/wallhaven-85kpek.jpg");
+        // @include ele-bg($url: "https://img.freepik.com/free-vector/royal-watercolor-valentine-red-background_1340-4006.jpg?w=740&t=st=1715268525~exp=1715269125~hmac=80a9cf6a6491ed647008ae51756e8f3caec116eb97afb630c1cec6eaea44cd80");
+        @include ele-bg($url: $background-image);
         // filter: brightness(50%);
 
         #logo-container {
@@ -29,7 +37,7 @@ header {
                 text-transform: uppercase;
                 font-size: 1.8em; // fixed-size!
                 font-weight: bold;
-                color: var(--color1);
+                color: var(--white-color);
             
             cursor: pointer;
             a {
@@ -177,7 +185,7 @@ header {
             justify-content: space-around;
 
 
-            @include ele-bg($url: "https://w.wallhaven.cc/full/48/wallhaven-48e67o.jpg");
+            @include ele-bg($url: $background-image);
             height: 92vh;
             li {
                 float: none;  // <>
