@@ -9,6 +9,7 @@ header {
 
 
     @include ele-bg($url: $background-image);
+    // background-color: yellowgreen;
     // filter: brightness(50%);
 
 
@@ -23,7 +24,7 @@ header {
             left: 0;
         // background: transparent;
         // @include ele-bg($url: "https://img.freepik.com/free-vector/royal-watercolor-valentine-red-background_1340-4006.jpg?w=740&t=st=1715268525~exp=1715269125~hmac=80a9cf6a6491ed647008ae51756e8f3caec116eb97afb630c1cec6eaea44cd80");
-        @include ele-bg($url: $background-image);
+        // @include ele-bg($url: $background-image);
         // filter: brightness(50%);
 
         #logo-container {

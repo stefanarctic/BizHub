@@ -18,6 +18,7 @@ const Chat = () => {
         setRefreshComponentV(refreshComponentV + 1);
     }
 
+    // Navigate to login
     useEffect(() => {
         navigateToLogin = () => {
             // navigate('/login');
@@ -28,6 +29,7 @@ const Chat = () => {
         }
     }, []);
 
+    // Check if user is logged in, else redirect to login page
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
             if (!user) {
@@ -44,6 +46,7 @@ const Chat = () => {
         return () => unsubscribe();
     }, []);
 
+    // Log out when user presses Escape (REMOVE)
     useEffect(() => {
         document.addEventListener('keydown', e => {
             if(e.key === 'Escape')
@@ -61,6 +64,8 @@ const Chat = () => {
             })
             .catch(err => console.error(err));
     }
+
+    /* --- Fetch Data from the database --- */
                     
     const [users, setUsers] = useState([]);
 

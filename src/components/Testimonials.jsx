@@ -1,11 +1,11 @@
 
 import { useEffect } from 'react';
 
-import Avatar1 from '../images/avatars/1.png';
-import Avatar2 from '../images/avatars/2.png';
-import Avatar3 from '../images/avatars/3.png';
-import Avatar4 from '../images/avatars/4.png';
-import Avatar5 from '../images/avatars/5.png';
+import Avatar1 from '/images/avatars/1.png';
+import Avatar2 from '/images/avatars/2.png';
+import Avatar3 from '/images/avatars/3.png';
+import Avatar4 from '/images/avatars/4.png';
+import Avatar5 from '/images/avatars/5.png';
 
 const Testimonials = () => {
 

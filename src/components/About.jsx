@@ -1,4 +1,4 @@
-import SamSuit from '../images/sam-suit.jpg';
+import SamSuit from '/images/sam-suit.jpg';
 
 const About = () => {
     return (
