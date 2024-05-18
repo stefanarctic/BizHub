@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const WorkspaceTitle = () => {
+const WorkspaceTitle = ({ user, currentWorkspace, joinedWorkspaces }) => {
 
-    const [workspaceTitle, setWorkspaceTitle] = useState('Black Belt Developers');
+    // useEffect(() => {
+    //     if(user)
+    //     {
+    //         setCurrentWorkspace(currentWorkspace);
+    //         setJoinedWorkspaces(joinedWorkspaces);
+    //         // console.log('Current workspace: ', user.currentWorkspace);
+    //         // setJoinedWorkspaces(user.joinedWorkspaces);
+    //         // setCurrentWorkspace(user.currentWorkspace);
+    //     }
+    // });
 
     return (
         <div className="workspace-title">
-            <h1>{workspaceTitle}</h1>
+            <h1>{currentWorkspace?.name}</h1>
+            {/* To add joined workspaces selector */}
         </div>
     );
 }

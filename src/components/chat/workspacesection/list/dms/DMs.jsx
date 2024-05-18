@@ -1,5 +1,5 @@
 
-const DMs = () => {
+const DMs = ({ user, setUser }) => {
     return (
         <div className="dms">DMs</div>
     );

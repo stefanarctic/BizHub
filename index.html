@@ -15,8 +15,15 @@
   <body>
     <div id="root"></div>
     <script>
-      let signOutFunction = () => {}
-      let printAccountDetails = () => {}
+      var signOutFunction = () => {}
+      var printGoogleAccountDetails = () => {}
+      var getUsers = () => {}
+      var getWorkspaces = () => {}
+      const generateRandomId = () => {
+        const randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        return randomString.replace(/[^a-z0-9]/g, ''); // Remove non-alphanumeric characters
+      }
+      // console.log = (...data) => {}  // Disable console.log()
     </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
