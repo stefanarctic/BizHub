@@ -5,6 +5,9 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { Messages } from "./chat/messages/Messages";
 import WorkspaceSection from "./chat/workspacesection/WorkspaceSection";
+import { getChannelsParent } from "./chat/workspacesection/list/conversationselector/ConversationSelector";
+import { DataManager } from "./chat/DataManager";
+import { onUpdateCurrentWorkspace, onUpdateJoinedWorkspaces } from "./chat/workspacesection/list/workspacetitle/WorkspaceTitle";
 
 export let navigateToLogin = () => {}
 
@@ -30,7 +33,7 @@ export const getUserFromDatabase = (userId, onFinish, onError) => {
         // console.error(`Error in retrieving document for user ${auth.currentUser.displayName}`, err);
 }
 
-export const getWorkspace = (workspaceId, onFinish, onError) => { // Get workspace data by document id
+export const getWorkspace = (workspaceId, onFinish /* docData => {} */, onError) => { // Get workspace data by document id
     const workspaceRef = doc(db, 'workspaces', workspaceId);
     getDoc(workspaceRef)
         .then(doc => {
@@ -71,15 +74,15 @@ export const getUser = (userId, onFinish, onError) => { // Get user data by uid
         });
 }
 
-const trace = s => {
-    const orig = Error.prepareStackTrace;
-    Error.prepareStackTrace = (_, stack) => stack;
-    const err = new Error();
-    Error.captureStackTrace(err, arguments.callee);
-    Error.prepareStackTrace = orig;
-    const callee = err.stack[0];
-    return (`${path.relative(process.cwd(), callee.getFileName())}:${callee.getLineNumber()}: ${s}\n`);
-}
+// const trace = s => {
+//     const orig = Error.prepareStackTrace;
+//     Error.prepareStackTrace = (_, stack) => stack;
+//     const err = new Error();
+//     Error.captureStackTrace(err, arguments.callee);
+//     Error.prepareStackTrace = orig;
+//     const callee = err.stack[0];
+//     return (`${path.relative(process.cwd(), callee.getFileName())}:${callee.getLineNumber()}: ${s}\n`);
+// }
 
 const Chat = () => {
 
@@ -173,34 +176,53 @@ const Chat = () => {
 
     // Test
     useEffect(() => {
-        console.log('Joined workspaces: ', joinedWorkspaces);
-    })
+        console.log('Joined workspaces (test, test): ', joinedWorkspaces);
+        onUpdateJoinedWorkspaces(joinedWorkspaces);
+    }, [joinedWorkspaces]);
+
+    useEffect(() => {
+        onUpdateCurrentWorkspace(currentWorkspace);
+        // console.log(`Current workspace Chat.jsx: `, currentWorkspace);
+    }, [currentWorkspace]);
+
+    useEffect(() => {
+        console.log(`On joined workspaces update custom: `, joinedWorkspaces);
+    }, [joinedWorkspaces]);
 
     const onLogin = () => {
         addCurrentUserIfNotFoundInDatabase(userData => {
             console.log('On add current user')
             userData.currentWorkspace = userData.joinedWorkspaces.length === 0 ? null : userData.joinedWorkspaces[0] // If user has joined any workspaces, set the current one to be the first one in the array
 
+            // console.log(`After finishing joined workspaces: `, userData.joinedWorkspaces);
             // Get joined workspaces data
             // console.log(`Joined workspaces:`);
             // userData.joinedWorkspaces.map(joinedWorkspace => console.log(joinedWorkspace));
             // let jw = [];
+            // console.log(`On login joined workspaces: `, joinedWorkspaces);
+            let jw = [];
             userData.joinedWorkspaces.map(workspaceId => {
                 getWorkspace(workspaceId, workspaceData => {
-                    // jw.push(workspaceData);
-                    setJoinedWorkspaces([
-                        ...joinedWorkspaces,
-                        workspaceData
-                    ]);
+                    jw.push(workspaceData);
                 }, err => {
                     console.error(err);
                 });
+            }, err => {
+                console.error(err);
             });
-            // setJoinedWorkspaces(jw);
+            setJoinedWorkspaces(jw);
+
+            console.log(`State joined workspaces: `, jw);
 
             // Get current workspace data
             // const currentWorkspaceId = userData.currentWorkspace;
             currentWorkspaceId.current = userData.currentWorkspace;
+            console.log(`Userdata current workspace id: `, userData.currentWorkspace);
+            // setCurrentWorkspace(getWorkspace(userData))
+            getWorkspace(userData.currentWorkspace, workspaceData => {
+                setCurrentWorkspace(workspaceData);
+            }, err => console.error(err));
+            // refreshComponent();
             // console.log('jw: ', jw);
             // console.log('Typeof jw: ', typeof(jw));
             // console.log('First workspace id:', jw.id);
@@ -534,6 +556,8 @@ const Chat = () => {
                 {
                     // If user is already in the database, that means q contains a single document, which is the current user
                     const currentUserDocumentSnapshot = querySnapshot.docs[0];
+                    console.log(`Got current user: `, currentUserDocumentSnapshot.data());
+                    console.log(`Before finishing joined workspaces: `, currentUserDocumentSnapshot.data().joinedWorkspaces);
                     onFinish(currentUserDocumentSnapshot.data());
                 }
             })
@@ -652,6 +676,18 @@ const Chat = () => {
     //     console.log(`Current workspace: ${currentWorkspace}`);
     // });
 
+    useEffect(() => {
+        // Set button as selected
+        // document.getElementsByClassName('channels')[0].children[0].className = 'channel selected';
+        setTimeout(() => {
+            const channelsParentRef = getChannelsParent();
+            // console.log(`Channels parent ref select channel: `, channelsParentRef.current.children);
+            console.log(`Joined workspaces channelsParentRef: `, joinedWorkspaces);
+            channelsParentRef.current.children.item(0).className = 'channel selected';
+            console.log(`CPR: `, channelsParentRef.current.children.item(0).className);
+        }, 3000);
+    }, []);
+
     return (
         <>
             <nav>
@@ -659,10 +695,11 @@ const Chat = () => {
             </nav>
             <main>
                 <div className="chat">
+                    <DataManager loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} setUser={setUser} currentWorkspace={currentWorkspace} setCurrentWorkspace={setCurrentWorkspace} joinedWorkspaces={joinedWorkspaces} setJoinedWorkspaces={setJoinedWorkspaces} currentWorkspaceId={currentWorkspaceId} />
                     { loggedIn && (
                         <>
-                            <WorkspaceSection user={user} setUser={setUser} currentWorkspace={currentWorkspace} />
-                            <Messages user={user} setUser={setUser} loggedIn={loggedIn} currentWorkspace={currentWorkspace} />
+                            <WorkspaceSection user={user} setUser={setUser} currentWorkspace={currentWorkspace} joinedWorkspaces={joinedWorkspaces} />
+                            <Messages user={user} setUser={setUser} loggedIn={loggedIn} currentWorkspace={currentWorkspace} setCurrentWorkspace={setCurrentWorkspace} />
                         </>
                     )}
                     {/* <button onClick={joinTestWorkspace}>Join Test Workspace</button> */}

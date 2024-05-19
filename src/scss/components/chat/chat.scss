@@ -38,13 +38,90 @@ main {
 
             outline: 1px solid $debug-outline-color;
             display: flex;
+            flex-direction: row;
             justify-content: left;
             padding-left: 20px;
+            position: relative;
+            // gap: 10px;
 
-            h1 {
-                // all: unset;
-                font-size: 25px;
-                font-weight: bolder;
+            .text-and-arrow {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                cursor: pointer;
+
+                h1 {
+                    // all: unset;
+                    font-size: 25px;
+                    font-weight: bolder;
+                    // background-color: red;
+                }
+    
+    
+                img {
+                    // position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    margin-top: 23px;
+                    // background-color: red;
+                    // top: 20px;
+                    // left: 65%;
+                    // margin-top: 20px;
+                    // background-color: red;
+                    // z-index: -9999;
+                }
+            }
+
+            .joined-workspaces-select {
+                // display: none;
+                position: absolute;
+                // min-width: 160px;
+                // min-width: auto;
+                min-width: 65%;
+                padding: 10px;
+                // min-width: min-content;
+
+                display: none;
+                z-index: 1;
+                top: 60px;
+                // background-color: rgba(17, 25, 40, 0.75);
+                // background-color: rgba(0, 0, 0, 0.711);
+                background-color: rgba(83, 86, 101, 0.721);
+                backdrop-filter: blur(10px) saturate(180%);
+                // backdrop-filter: blur(10px) saturate(50%);
+                // color: white;
+                // background-color: whitesmoke;
+                border-radius: 10px;
+                cursor: pointer;
+                // padding: 10px;
+
+                &.show {
+                    display: block;
+                }
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 12px 16px;
+                    // color: black;
+                    font-size: 20px;
+                    // font-weight: 500;
+                    border-radius: 10px;
+                    // border-bottom: 1px solid black;
+
+                    &:hover {
+                        background-color: rgba(0, 0, 0, 0.284);
+                        color: white;
+                    }
+
+                    // &::before {
+                    //     content: "";
+                    //     width: 75%;
+                    //     background-color: black;
+                    //     // position: absolute;
+                    // }
+                }
             }
 
         }
@@ -254,9 +331,9 @@ main {
                     // background-color: yellow;
                     // width: 100%;
 
-                    &:hover .upload-select {
-                        // display: block;
-                    }
+                    // &:hover .upload-select {
+                    //     display: block;
+                    // }
 
                     .upload-select {
                         // display: none;

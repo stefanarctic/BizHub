@@ -56,7 +56,7 @@ const Auth = () => {
         signOutFunction = () => {
             signOut(auth).then(e => console.log(`Logged out`)).catch(error => console.error(error));
         }
-        printAccountDetails = () => {
+        printGoogleAccountDetails = () => {
             console.log(auth.currentUser);
         }
         console.log('Entered login page');

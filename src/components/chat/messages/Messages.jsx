@@ -1,18 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import { getUserFromDatabase } from "../../Chat";
-import { Timestamp, collection, doc, onSnapshot } from "firebase/firestore";
+import { Timestamp, collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import * as Utils from '../../Util/Utils';
 import { db } from "../../../firebase/FirebaseSetup";
 import { update } from "firebase/database";
+import { getChannelsParent, refreshSelectedChannel, setOnChannelUpdate } from "../workspacesection/list/conversationselector/ConversationSelector";
 
 export let onCurrentChannelUpdate = callback /* (currentChannel) => {} */ => {};
 export let setCurrentChannelGlobal = index => {}
 
-export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
+export let getMessagesSectionRef = () => {}
+export let getInputRef = () => {}
+
+export let scrollToLastMessage = () => {}
+
+// export let scrollToLastMessageGlobal = () => {}
+
+export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurrentWorkspace }) => {
 
     const uploadSelect = useRef(null);
     const uploadButton = useRef(null);
     const messageInput = useRef(null);
+
+    const messagesSectionRef = useRef(null);
 
     // const [currentWorkspaceState, setCurrentWorkspaceState] = useState(null); // Exclusively for current channel selection
     // const [currentChannel, setCurrentChannel] = useState(null);
@@ -42,6 +52,15 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
         //     return [currentChannel, setCurrentChannel];
         // }
         // onCurrentChannelUpdate = onCurrentChannelUpdateFunction
+        // scrollToLastMessageGlobal = () => {
+        //     scrollToLastMessage();
+        // }
+        getInputRef = () => {
+            return messageInput;
+        }
+        getMessagesSectionRef = () => {
+            return messagesSectionRef;
+        }
         setCurrentChannelGlobal = index => {
             setCurrentChannel(index);
         }
@@ -154,16 +173,48 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
         return () => (document.removeEventListener('keydown', checkIfPressed), document.removeEventListener('keyup', resetKeys));
     }, []);
 
-    const onEnter = e => {
-        const text = e.target.value.trim();
+    const [currentMessage, setCurrentMessage] = useState('');
+
+    // useEffect(() => {
+    //     console.log(`Current message: `, currentMessage);
+    // }, [currentMessage]);
+
+    const trimText = text => {
+        return text.trim();
+    }
+
+    const onTrySendMessage = e => {
+        const text = trimText(currentMessage);
+        // e.target.value = '';
         if(text.length > 0)
         {
+            // Send message to the database, and wait for the code to detect it on the frontend
             sendMessage(text);
-            e.target.value = '';
+            // Clear input
+            setCurrentMessage('');
+            getInputRef().current.focus();
+            // Scroll to the last message
+
+            // const messagesLocal = currentWorkspace?.channels[currentChannel]?.messages;
+            // messagesLocal[messagesLocal.length - 1].scrollIntoView({ behavior: 'smooth' });
+            // console.log(`Messages local last`, messagesLocal[messagesLocal.length - 1]);
+        }
+        else
+        {
+            console.log(`Message empty`);
+        }
+    }
+
+    const checkForEnter = e => {
+        if(e.key === 'Enter')
+        {
+            // const text = e.target.value.trim();
+            onTrySendMessage(e);
         }
     }
 
     const sendMessage = text => {
+        console.log(`Looking to send message`, text);
         // user - user
         // imageURL - user.photoURL
         // text - text
@@ -172,19 +223,24 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
             createdAt: Timestamp.now(),
             type: 'text',
             text: text,
-            imageURL: user.photoURL,
+            imageURL: '',
             senderId: user.uid
         };
-        const updatedWorkspace = {
-            ...currentWorkspace
-        };
-        updatedWorkspace.channels.messages.push(messageObject);
+
+        console.log(`Message object: `, messageObject);
+        currentWorkspace.channels[currentChannel].messages.push(messageObject);
+        console.log(`Messages: `, currentWorkspace.channels[currentChannel].messages);
+        // console.log(`Current workspace: `, currentWorkspace);
+        // currentWorkspace.channels.messages = [...currentWorkspace.channels.messages, messageObject];
+        // const updatedWorkspace = {
+        //     ...currentWorkspace
+        // };
         
         // const workspacesCollection = collection(db, 'workspaces');
         const workspaceId = currentWorkspace.id;
         const workspaceRef = doc(db, 'workspaces', workspaceId);
 
-        update(workspaceRef, updatedWorkspace)
+        updateDoc(workspaceRef, currentWorkspace)
             .then(() => {
                 console.log('Updated workspace successfully');
             })
@@ -193,40 +249,82 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
             });
     }
 
-    const updateWorkspace = (newWorkspace) => {
-        // setCurrentWorkspaceState(newWorkspace);
-        // setCurrentChannel(user.currentWorkspace?.channels?.length === 0 ? null : user.currentWorkspace?.channels[0]);
+    useEffect(() => {
+        scrollToLastMessage();
+    }, [messagesSectionRef]);
+
+    scrollToLastMessage = () => {
+        const messagesLocal = messagesSectionRef.current.children;
+        if(messagesLocal && messagesLocal.item(messagesLocal.length - 1))
+        {
+            messagesLocal.item(messagesLocal.length - 1).scrollIntoView({ behavior: 'instant' });
+            // console.log(messagesLocal.item(messagesLocal.length - 1));
+            console.log(`Scrolled into view`);
+        }
+    }
+
+    // const updateWorkspace = (newWorkspace) => {
+    //     // setCurrentWorkspaceState(newWorkspace);
+    //     // setCurrentChannel(user.currentWorkspace?.channels?.length === 0 ? null : user.currentWorkspace?.channels[0]);
+    // }
+
+    const refreshWorkspace = snapshot => {
+        const snapshotData = snapshot.data();
+        setCurrentWorkspace(snapshotData);
+        refreshSelectedChannel();
+        // Scroll to the last message
+        scrollToLastMessage();
+        // const messagesLocal = getMessagesSectionRef().current.children;
+        // messagesLocal.item(messagesLocal.length - 1).scrollIntoView({ behavior: 'smooth' });
+        // console.log(`Scrolled into ${messagesLocal.item(messagesLocal.length - 1)}`);
+        // messageInput.current.scrollIntoView({ behavior: 'smooth' });
+        // setTimeout(() => refreshSelectedChannel(), 5000);
+        // setCurrentWorkspace(snapshot.data());
+        // console.log(`Refreshed workspace, snapshot: `, snapshot);
+        // updateWorkspace(snapshot.data());
     }
 
     // Update content when workspace changes
     useEffect(() => {
-        // let unsubscribe = () => {}
-        // if(currentWorkspace)
-        // {
-        //     const workspacesCollection = collection(db, 'workspaces');
-        //     const workspaceId = currentWorkspace?.id;
-        //     const workspaceRef = doc(workspacesCollection, workspaceId);
+        let unsubscribe = () => {}
+        if(currentWorkspace)
+        {
+            const workspacesCollection = collection(db, 'workspaces');
+            const workspaceId = currentWorkspace?.id;
+            const workspaceRef = doc(workspacesCollection, workspaceId);
 
-        //     // When database changes, update frontend data
-        //     unsubscribe = onSnapshot(workspaceRef, snapshot => {
-        //         updateWorkspace(snapshot.data());
-        //     });
-        // }
+            // When database changes, update frontend data
+            unsubscribe = onSnapshot(workspaceRef, snapshot => {
+                refreshWorkspace(snapshot);
+            });
+        }
 
-        // useRunOnce()
+        return () => unsubscribe();
+    }, [currentWorkspace?.id]);
 
+    const localOnChannelUpdate = () => { // No parameters needed here
+        // const messagesLocal = currentWorkspace?.channels[currentChannel]?.messages;
+        if(messagesLocal)
+        {
+                // Scroll to the last message
+                // messagesLocal.scrollIntoView({ behavior: 'smooth' });
+                // scrollToLastMessage();
+            // messagesLocal[messagesLocal.length - 1].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
 
-        // return () => unsubscribe();
+    useEffect(() => {
+        setOnChannelUpdate(localOnChannelUpdate);
     }, []);
 
     return (
         <div className="messages">
-        {loggedIn ? (
+        {loggedIn  ? (
         <>
             <div className="channel-title">
                 <h1># { currentWorkspace && currentWorkspace.channels && currentWorkspace.channels.length > 0 && currentChannel > -1 && currentWorkspace.channels[currentChannel].name }</h1>
             </div>
-            <div className="messages-section">
+            <div className="messages-section" ref={messagesSectionRef}>
                 {/* <div className="message">
                     <img src="/test/profile-pic1.png" />
                     <div className="texts">
@@ -285,7 +383,7 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
                                 // const sentDateUTC = sentTimestamp.toDate();
                                 // const sentDateLocal = Utils.convertToLocalTime(sentDateUTC);
                                 const sentDate = sentTimestamp.toDate();
-                                const formattedDate = `${sentDate.getHours()}:${sentDate.getMinutes()}`;
+                                const formattedDate = `${sentDate.getHours() < 10 ? '0' + sentDate.getHours() : sentDate.getHours()}:${sentDate.getMinutes() < 10 ? '0' + sentDate.getMinutes() : sentDate.getMinutes()}`;
                                 return formattedDate;
                             })()}</span>
                         </div>
@@ -302,9 +400,9 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
                             <span>Select 3</span>
                         </div>
                     </div>
-                    <input type="text" placeholder="Type a message..." id="message-input" ref={messageInput} onKeyDown={onEnter} />
+                    <input autoComplete="off" type="text" placeholder="Type a message..." id="message-input" ref={messageInput} onKeyDown={checkForEnter} value={currentMessage} onChange={e => setCurrentMessage(e.target.value)} />
                 </div>
-                <img src="/images/icons/white/send.png" className="send-btn" />
+                <img src="/images/icons/white/send.png" className="send-btn" onClick={onTrySendMessage} />
             </div>
         </> ) : 
             (
