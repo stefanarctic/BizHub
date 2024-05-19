@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { joinedWorkspacesGlobal } from "../../../DataManager";
 import * as Utils from '../../../../Util/Utils';
+import { setCurrentWorkspaceGlobal } from "../../../../Chat";
 
 export let onUpdateJoinedWorkspaces = _joinedWorkspaces => {}
 export let onUpdateCurrentWorkspace = _currentWorkspace => {}
@@ -54,6 +55,13 @@ export const WorkspaceTitle = ({ user }) => {
         }
     }, [currentWorkspace]);
 
+    const onSelectWorkspace = e => {
+        const newSelectedWorkspaceId = e.target.key;
+        const newWorkspace = joinedWorkspaces.find(workspace => workspace.id === newSelectedWorkspaceId);
+        // setCurrentWorkspace(newWorkspace);
+        setCurrentWorkspaceGlobal(newWorkspace);
+    }
+
     // useEffect(() => {
     //     joinedWorkspaces.current = joinedWorkspacesGlobal;
     //     console.log(`Joined workspaces: `, joinedWorkspacesGlobal);
@@ -78,7 +86,7 @@ export const WorkspaceTitle = ({ user }) => {
             </div>
             <div className="joined-workspaces-select" ref={joinedWorkspacesListRef}>
                 { joinedWorkspaces.map(workspace => (
-                    <span key={Utils.generateRandomId()}>{workspace.name}</span>
+                    <span key={workspace.id} onClick={onSelectWorkspace}>{workspace.name}</span>
                 )) }
             </div>
         </div>

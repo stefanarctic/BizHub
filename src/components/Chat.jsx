@@ -33,6 +33,8 @@ export const getUserFromDatabase = (userId, onFinish, onError) => {
         // console.error(`Error in retrieving document for user ${auth.currentUser.displayName}`, err);
 }
 
+export let setCurrentWorkspaceGlobal = newWorkspace => {}
+
 export const getWorkspace = (workspaceId, onFinish /* docData => {} */, onError) => { // Get workspace data by document id
     const workspaceRef = doc(db, 'workspaces', workspaceId);
     getDoc(workspaceRef)
@@ -87,17 +89,38 @@ export const getUser = (userId, onFinish, onError) => { // Get user data by uid
 const Chat = () => {
 
     // Set global functions (REMOVE)
-    useEffect(() => {
-        printGoogleAccountDetails = () => {
-            console.log(auth.currentUser);
-        }
-        getUsers = () => {
-            console.log(users);
-        }
-        getWorkspaces = () => {
-            console.log(workspaces);
-        }
-    }, []);
+    // useEffect(() => {
+    //     printGoogleAccountDetails = () => {
+    //         console.log(auth.currentUser);
+    //     }
+    //     getUsers = () => {
+    //         console.log(users);
+    //     }
+    //     getWorkspaces = () => {
+    //         console.log(workspaces);
+    //     }
+    // }, []);
+
+    // useEffect(() => {
+    //     // Store current workspace id in localStorage
+    //     setTimeout(() => {
+    //         const cw = {...currentWorkspace};
+    //         const cwId = cw.id;
+            
+    //         // Firstly, search for existing currentWorkspaceId in localStorage
+    //         if(!localStorage.getItem('currentWorkspaceId'))
+    //         {
+    //             localStorage.setItem('currentWorkspaceId', cwId);
+    //         }
+    //         else
+    //         {
+    //             getWorkspace(localStorage.getItem('currentWorkspaceId'), workspaceData => {
+    //                 console.log(`Set current workspace from cookies`);
+    //                 setCurrentWorkspace(workspaceData);
+    //             }, err => console.error(err));
+    //         }
+    //     }, 3000);
+    // }, []);
 
     const navigate = useNavigate();
 
@@ -115,6 +138,9 @@ const Chat = () => {
             linkToLogin.href = '/login';
             document.body.appendChild(linkToLogin);
             linkToLogin.click();
+        }
+        setCurrentWorkspaceGlobal = newWorkspace => {
+            setCurrentWorkspace(newWorkspace);
         }
     }, []);
 
@@ -221,9 +247,37 @@ const Chat = () => {
             currentWorkspaceId.current = userData.currentWorkspace;
             console.log(`Userdata current workspace id: `, userData.currentWorkspace);
             // setCurrentWorkspace(getWorkspace(userData))
-            getWorkspace(userData.currentWorkspace, workspaceData => {
+
+            // const cw = {...userData.currentWorkspace};
+            const cwId = userData.currentWorkspace;
+            
+            // Firstly, search for existing currentWorkspaceId in localStorage
+            // if(!localStorage.getItem('currentWorkspaceId'))
+            // {
+            //     localStorage.setItem('currentWorkspaceId', cwId);
+            // }
+            // else
+            // {
+            //     getWorkspace(localStorage.getItem('currentWorkspaceId'), workspaceData => {
+            //         console.log(`Set current workspace from cookies`);
+            //         setCurrentWorkspace(workspaceData);
+            //     }, err => console.error(err));
+            // }
+
+            // console.log(`cw: `, cw);
+
+            if(!localStorage.getItem('currentWorkspaceId'))
+                localStorage.setItem('currentWorkspaceId', cwId);
+            
+            const localStorageWorkspaceId = localStorage.getItem('currentWorkspaceId');
+            getWorkspace(localStorageWorkspaceId, workspaceData => {
                 setCurrentWorkspace(workspaceData);
             }, err => console.error(err));
+
+
+            // getWorkspace(userData.currentWorkspace, workspaceData => {
+            //     setCurrentWorkspace(workspaceData);
+            // }, err => console.error(err));
             // refreshComponent();
             // console.log('jw: ', jw);
             // console.log('Typeof jw: ', typeof(jw));

@@ -5,7 +5,7 @@ export let setLoggedInGlobal = () => {}
 export let userGlobal = null;
 export let setUserGlobal = () => {}
 export let currentWorkspaceGlobal = null;
-export let setCurrentWorkspaceGlobal = () => {}
+// export let setCurrentWorkspaceGlobal = () => {}
 export let joinedWorkspacesGlobal = null;
 export let setJoinedWorkspacesGlobal = () => {}
 export let currentWorkspaceIdGlobal = null;
@@ -19,7 +19,7 @@ export const DataManager = ({ loggedIn, setLoggedIn, user, setUser, currentWorks
         userGlobal = user;
         setUserGlobal = setUser;
         currentWorkspaceGlobal = currentWorkspace;
-        setCurrentWorkspaceGlobal = setCurrentWorkspace;
+        // setCurrentWorkspaceGlobal = setCurrentWorkspace;
         joinedWorkspacesGlobal = joinedWorkspaces;
         setJoinedWorkspacesGlobal = setJoinedWorkspaces;
         currentWorkspaceIdGlobal = currentWorkspaceId;
