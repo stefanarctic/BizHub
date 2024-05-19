@@ -291,6 +291,8 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurren
         {
             const workspacesCollection = collection(db, 'workspaces');
             const workspaceId = currentWorkspace?.id;
+            console.log(`Current workspace changed: `, currentWorkspace);
+            return;
             const workspaceRef = doc(workspacesCollection, workspaceId);
 
             // When database changes, update frontend data

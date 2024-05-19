@@ -11,6 +11,8 @@ import { onUpdateCurrentWorkspace, onUpdateJoinedWorkspaces } from "./chat/works
 
 export let navigateToLogin = () => {}
 
+export let callOnLogin = () => {}
+
 export const getUserFromDatabase = (userId, onFinish, onError) => {
     let user = null;
     const usersCollection = collection(db, 'users');
@@ -87,17 +89,17 @@ export const getUser = (userId, onFinish, onError) => { // Get user data by uid
 const Chat = () => {
 
     // Set global functions (REMOVE)
-    useEffect(() => {
-        printGoogleAccountDetails = () => {
-            console.log(auth.currentUser);
-        }
-        getUsers = () => {
-            console.log(users);
-        }
-        getWorkspaces = () => {
-            console.log(workspaces);
-        }
-    }, []);
+    // useEffect(() => {
+    //     printGoogleAccountDetails = () => {
+    //         console.log(auth.currentUser);
+    //     }
+    //     getUsers = () => {
+    //         console.log(users);
+    //     }
+    //     getWorkspaces = () => {
+    //         console.log(workspaces);
+    //     }
+    // }, []);
 
     const navigate = useNavigate();
 
@@ -115,6 +117,9 @@ const Chat = () => {
             linkToLogin.href = '/login';
             document.body.appendChild(linkToLogin);
             linkToLogin.click();
+        }
+        callOnLogin = () => {
+            onLogin();
         }
     }, []);
 
@@ -193,8 +198,15 @@ const Chat = () => {
 
     const onLogin = () => {
         addCurrentUserIfNotFoundInDatabase(userData => {
-            console.log('On add current user')
+            console.log('On add current user');
             userData.currentWorkspace = userData.joinedWorkspaces.length === 0 ? null : userData.joinedWorkspaces[0] // If user has joined any workspaces, set the current one to be the first one in the array
+            const localStorageCurrentWorkspaceId = localStorage.currentWorkspaceId;
+            if(!localStorageCurrentWorkspaceId)
+            {
+                localStorage.currentWorkspaceId = userData.currentWorkspace;
+            }
+
+            userData.currentWorkspace = localStorage.currentWorkspaceId;
 
             // console.log(`After finishing joined workspaces: `, userData.joinedWorkspaces);
             // Get joined workspaces data
@@ -700,7 +712,7 @@ const Chat = () => {
                     <DataManager loggedIn={loggedIn} setLoggedIn={setLoggedIn} user={user} setUser={setUser} currentWorkspace={currentWorkspace} setCurrentWorkspace={setCurrentWorkspace} joinedWorkspaces={joinedWorkspaces} setJoinedWorkspaces={setJoinedWorkspaces} currentWorkspaceId={currentWorkspaceId} />
                     { loggedIn && (
                         <>
-                            <WorkspaceSection user={user} setUser={setUser} currentWorkspace={currentWorkspace} joinedWorkspaces={joinedWorkspaces} />
+                            <WorkspaceSection user={user} setUser={setUser} currentWorkspace={currentWorkspace} joinedWorkspaces={joinedWorkspaces} setCurrentWorkspace={setCurrentWorkspace} currentWorkspaceId={currentWorkspaceId} />
                             <Messages user={user} setUser={setUser} loggedIn={loggedIn} currentWorkspace={currentWorkspace} setCurrentWorkspace={setCurrentWorkspace} />
                         </>
                     )}

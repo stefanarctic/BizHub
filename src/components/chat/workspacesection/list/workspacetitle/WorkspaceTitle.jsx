@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { joinedWorkspacesGlobal } from "../../../DataManager";
 import * as Utils from '../../../../Util/Utils';
+import { callOnLogin } from "../../../../Chat";
 
 export let onUpdateJoinedWorkspaces = _joinedWorkspaces => {}
 export let onUpdateCurrentWorkspace = _currentWorkspace => {}
 
-export const WorkspaceTitle = ({ user }) => {
+export const WorkspaceTitle = ({ user, setCurrentWorkspace, currentWorkspaceId }) => {
 
     // const currentWorkspace = useRef(null);
     // const joinedWorkspaces = useRef(null);
-    const [currentWorkspace, setCurrentWorkspace] = useState(null);
+    const [currentWorkspace, setCurrentWorkspaceInternal] = useState(null);
     const [joinedWorkspaces, setJoinedWorkspaces] = useState([]);
     const joinedWorkspacesListRef = useRef(null);
 
@@ -33,7 +34,7 @@ export const WorkspaceTitle = ({ user }) => {
             setJoinedWorkspaces(_joinedWorkspaces);
         }
         onUpdateCurrentWorkspace = _currentWorkspace => {
-            setCurrentWorkspace(_currentWorkspace);
+            setCurrentWorkspaceInternal(_currentWorkspace);
         }
         setTimeout(() => {
             refreshComponent();
@@ -51,6 +52,7 @@ export const WorkspaceTitle = ({ user }) => {
         if(currentWorkspace)
         {
             console.log(`Current workspace WorkspaceTitle.jsx `, currentWorkspace);
+            // localStorage.setItem('currentWorkspaceId', currentWorkspace.id);
         }
     }, [currentWorkspace]);
 
@@ -62,13 +64,30 @@ export const WorkspaceTitle = ({ user }) => {
     // useEffect(() => {
     //     if(user)
     //     {
-    //         setCurrentWorkspace(currentWorkspace);
+    //         setCurrentWorkspaceInternal(currentWorkspace);
     //         setJoinedWorkspaces(joinedWorkspaces);
     //         // console.log('Current workspace: ', user.currentWorkspace);
     //         // setJoinedWorkspaces(user.joinedWorkspaces);
-    //         // setCurrentWorkspace(user.currentWorkspace);
+    //         // setCurrentWorkspaceInternal(user.currentWorkspace);
     //     }
     // });
+
+    const switchWorkspace = e => {
+        const newSelectedWorkspaceId = e.target.id;
+        const newWorkspace = joinedWorkspaces.find(workspace => workspace.id === newSelectedWorkspaceId);
+        // console.log(`Switched to `, newWorkspace);
+        newWorkspace.id = newSelectedWorkspaceId;
+        currentWorkspaceId.current = newWorkspace.id;
+        setCurrentWorkspaceInternal(newWorkspace);
+        setCurrentWorkspace(newWorkspace);
+        setTimeout(() => {
+            callOnLogin();
+        }, 50);
+        localStorage.currentWorkspaceId = newWorkspace.id;
+        // localStorage.setItem('currentWorkspaceId', newSelectedWorkspaceId);
+        // console.log(`Switched to:`);
+        // console.dir(e.target.id);
+    }
 
     return (
         <div className="workspace-title" onClick={toggleJoinedWorkspacesList}>
@@ -78,7 +97,7 @@ export const WorkspaceTitle = ({ user }) => {
             </div>
             <div className="joined-workspaces-select" ref={joinedWorkspacesListRef}>
                 { joinedWorkspaces.map(workspace => (
-                    <span key={Utils.generateRandomId()}>{workspace.name}</span>
+                    <span key={workspace.id} onClick={switchWorkspace} id={workspace.id}>{workspace.name}</span>
                 )) }
             </div>
         </div>
