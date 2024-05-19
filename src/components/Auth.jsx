@@ -53,12 +53,12 @@ const Auth = () => {
     }
 
     useEffect(() => {
-        signOutFunction = () => {
-            signOut(auth).then(e => console.log(`Logged out`)).catch(error => console.error(error));
-        }
-        printGoogleAccountDetails = () => {
-            console.log(auth.currentUser);
-        }
+        // signOutFunction = () => {
+        //     signOut(auth).then(e => console.log(`Logged out`)).catch(error => console.error(error));
+        // }
+        // printGoogleAccountDetails = () => {
+        //     console.log(auth.currentUser);
+        // }
         console.log('Entered login page');
     }, []);
 
