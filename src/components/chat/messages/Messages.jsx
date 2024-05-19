@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getUserFromDatabase } from "../../Chat";
-import { Timestamp, collection, doc, onSnapshot } from "firebase/firestore";
+import { Timestamp, collection, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import * as Utils from '../../Util/Utils';
 import { db } from "../../../firebase/FirebaseSetup";
 import { update } from "firebase/database";
@@ -8,7 +8,7 @@ import { update } from "firebase/database";
 export let onCurrentChannelUpdate = callback /* (currentChannel) => {} */ => {};
 export let setCurrentChannelGlobal = index => {}
 
-export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
+export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurrentWorkspace, setOnCurrentWorkspaceChange }) => {
 
     const uploadSelect = useRef(null);
     const uploadButton = useRef(null);
@@ -154,12 +154,36 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
         return () => (document.removeEventListener('keydown', checkIfPressed), document.removeEventListener('keyup', resetKeys));
     }, []);
 
-    const onEnter = e => {
-        const text = e.target.value.trim();
+    const [currentMessage, setCurrentMessage] = useState('');
+
+    // useEffect(() => {
+    //     console.log(`Current message: `, currentMessage);
+    // }, [currentMessage]);
+
+    const trimText = text => {
+        return text.trim();
+    }
+
+    const onTrySendMessage = e => {
+        const text = trimText(currentMessage);
+        console.log(`Looking to send message`, text);
+        // e.target.value = '';
         if(text.length > 0)
         {
             sendMessage(text);
-            e.target.value = '';
+            messageInput.current.value = '';
+        }
+        else
+        {
+            console.log(`Message empty`);
+        }
+    }
+
+    const checkForEnter = e => {
+        if(e.key === 'Enter')
+        {
+            // const text = e.target.value.trim();
+            onTrySendMessage(e);
         }
     }
 
@@ -172,19 +196,24 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
             createdAt: Timestamp.now(),
             type: 'text',
             text: text,
-            imageURL: user.photoURL,
+            imageURL: '',
             senderId: user.uid
         };
-        const updatedWorkspace = {
-            ...currentWorkspace
-        };
-        updatedWorkspace.channels.messages.push(messageObject);
+
+        console.log(`Message object: `, messageObject);
+        currentWorkspace.channels[currentChannel].messages.push(messageObject);
+        console.log(`Messages: `, currentWorkspace.channels[currentChannel].messages);
+        // console.log(`Current workspace: `, currentWorkspace);
+        // currentWorkspace.channels.messages = [...currentWorkspace.channels.messages, messageObject];
+        // const updatedWorkspace = {
+        //     ...currentWorkspace
+        // };
         
         // const workspacesCollection = collection(db, 'workspaces');
         const workspaceId = currentWorkspace.id;
         const workspaceRef = doc(db, 'workspaces', workspaceId);
 
-        update(workspaceRef, updatedWorkspace)
+        updateDoc(workspaceRef, currentWorkspace)
             .then(() => {
                 console.log('Updated workspace successfully');
             })
@@ -192,6 +221,54 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
                 console.error(err);
             });
     }
+
+    // Check for workspace updates
+    useEffect(() => {
+        // const workspacesCollection = collection(db, 'workspaces', workspaceId);
+        let unsubscribe = () => {}
+        if(currentWorkspace)
+        {
+            const currentWorkspaceDoc = doc(db, 'workspaces', currentWorkspace.id);
+            unsubscribe = onSnapshot(currentWorkspaceDoc, docSnapshot => {
+                if(docSnapshot.exists())
+                {
+                    const newWorkspace = {
+                        ...docSnapshot.data(),
+                        id: currentWorkspace.id // or docSnapshot.id
+                    };
+                    console.log(`Set current workspace: `, newWorkspace);
+                    setCurrentWorkspace(newWorkspace);
+                    // currentWorkspace
+                }
+                else
+                {
+                    console.log(`Workspace with id ${currentWorkspace.id} not found`); // Highly improbable
+                }
+            })
+
+        }
+
+        return () => unsubscribe();
+    }, [currentWorkspace?.id]);
+
+    const [refreshChatV, setRefreshChatV] = useState(0);
+
+    const refreshChat = () => {
+        console.log(`Chat refreshed`);
+    }
+
+    setOnCurrentWorkspaceChange(_currentWorkspace => {
+        // currentWorkspace = _currentWorkspace;
+        refreshChat();
+    });
+
+    // useEffect(() => {
+    //     if(currentWorkspace)
+    //     {
+    //         console.log(`On update currentWorkspace messages `, currentWorkspace);
+    //         // Update messages
+    //     }
+    // }, [currentWorkspace]);
 
     const updateWorkspace = (newWorkspace) => {
         // setCurrentWorkspaceState(newWorkspace);
@@ -285,7 +362,7 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
                                 // const sentDateUTC = sentTimestamp.toDate();
                                 // const sentDateLocal = Utils.convertToLocalTime(sentDateUTC);
                                 const sentDate = sentTimestamp.toDate();
-                                const formattedDate = `${sentDate.getHours()}:${sentDate.getMinutes()}`;
+                                const formattedDate = `${sentDate.getHours()}:${sentDate.getMinutes() < 10 ? '0' + sentDate.getMinutes() : sentDate.getMinutes()}`;
                                 return formattedDate;
                             })()}</span>
                         </div>
@@ -302,9 +379,9 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace }) => {
                             <span>Select 3</span>
                         </div>
                     </div>
-                    <input type="text" placeholder="Type a message..." id="message-input" ref={messageInput} onKeyDown={onEnter} />
+                    <input autoComplete="off" type="text" placeholder="Type a message..." id="message-input" ref={messageInput} onKeyDown={checkForEnter} value={currentMessage} onChange={e => setCurrentMessage(e.target.value)} />
                 </div>
-                <img src="/images/icons/white/send.png" className="send-btn" />
+                <img src="/images/icons/white/send.png" className="send-btn" onClick={onTrySendMessage} />
             </div>
         </> ) : 
             (

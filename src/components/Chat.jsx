@@ -641,6 +641,18 @@ const Chat = () => {
         //     });
     }
 
+    let onCurrentWorkspaceChange = currentWorkspace_ => {}
+
+    const setOnCurrentWorkspaceChange = callback /* currentWorkspace */ => {
+        onCurrentWorkspaceChange = callback;
+    }
+
+
+    useEffect(() => {
+        // onCurrentWorkspaceChange = currentWorkspace_ => 
+            onCurrentWorkspaceChange(currentWorkspace);
+    }, [currentWorkspace]);
+
     // Test images:
     // https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?90af0c8
     // /test/profile-pic1.png
@@ -662,7 +674,7 @@ const Chat = () => {
                     { loggedIn && (
                         <>
                             <WorkspaceSection user={user} setUser={setUser} currentWorkspace={currentWorkspace} />
-                            <Messages user={user} setUser={setUser} loggedIn={loggedIn} currentWorkspace={currentWorkspace} />
+                            <Messages user={user} setUser={setUser} loggedIn={loggedIn} currentWorkspace={currentWorkspace} setCurrentWorkspace={setCurrentWorkspace} setOnCurrentWorkspaceChange={setOnCurrentWorkspaceChange} />
                         </>
                     )}
                     {/* <button onClick={joinTestWorkspace}>Join Test Workspace</button> */}
