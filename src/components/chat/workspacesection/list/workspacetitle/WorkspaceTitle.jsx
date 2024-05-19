@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { joinedWorkspacesGlobal } from "../../../DataManager";
+import * as Utils from '../../../../Util/Utils';
 
 export let onUpdateJoinedWorkspaces = _joinedWorkspaces => {}
 export let onUpdateCurrentWorkspace = _currentWorkspace => {}
@@ -12,17 +13,31 @@ export const WorkspaceTitle = ({ user }) => {
     const [joinedWorkspaces, setJoinedWorkspaces] = useState([]);
     const joinedWorkspacesListRef = useRef(null);
 
+    const [refreshComponentV, setRefreshComponentV] = useState(0);
+
+    const refreshComponent = () => {
+        setRefreshComponentV(refreshComponentV + 1);
+    }
+
     const toggleJoinedWorkspacesList = () => {
         joinedWorkspacesListRef.current.classList.toggle('show');
     }
 
     useEffect(() => {
+        console.log(`In refreshComponentV joined workspaces: `, joinedWorkspaces);
+    }, [refreshComponentV]);
+
+    useEffect(() => {
         onUpdateJoinedWorkspaces = _joinedWorkspaces => {
+            console.log(`On update joined workspaces`, _joinedWorkspaces);
             setJoinedWorkspaces(_joinedWorkspaces);
         }
         onUpdateCurrentWorkspace = _currentWorkspace => {
             setCurrentWorkspace(_currentWorkspace);
         }
+        setTimeout(() => {
+            refreshComponent();
+        }, 1000);
     }, []);
 
     useEffect(() => {
@@ -62,9 +77,9 @@ export const WorkspaceTitle = ({ user }) => {
                 <img src="images/icons/white/arrow-down.png" />
             </div>
             <div className="joined-workspaces-select" ref={joinedWorkspacesListRef}>
-                <span>Select 1</span>
-                <span>Select 2</span>
-                <span>Select 3</span>
+                { joinedWorkspaces.map(workspace => (
+                    <span key={Utils.generateRandomId()}>{workspace.name}</span>
+                )) }
             </div>
         </div>
     );

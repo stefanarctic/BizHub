@@ -176,8 +176,10 @@ const Chat = () => {
 
     // Test
     useEffect(() => {
-        console.log('Joined workspaces (test, test): ', joinedWorkspaces);
-        onUpdateJoinedWorkspaces(joinedWorkspaces);
+        setTimeout(() => {
+            console.log('Joined workspaces (test, test): ', joinedWorkspaces);
+            onUpdateJoinedWorkspaces(joinedWorkspaces);
+        }, 50);
     }, [joinedWorkspaces]);
 
     useEffect(() => {
@@ -685,7 +687,7 @@ const Chat = () => {
             console.log(`Joined workspaces channelsParentRef: `, joinedWorkspaces);
             channelsParentRef.current.children.item(0).className = 'channel selected';
             console.log(`CPR: `, channelsParentRef.current.children.item(0).className);
-        }, 3000);
+        }, 1000);
     }, []);
 
     return (
