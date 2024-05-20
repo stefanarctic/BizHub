@@ -1,19 +1,18 @@
-import SamSuit from '/images/sam-suit.jpg';
+import SamSuit from '/images/bizhub_screenshot.png';
 
 const About = () => {
     return (
         <section id="about">
             <div className="hidden" id="about-txt">
-                <h2>ABOUT SAM</h2>
-                <p>Hi I'm Sam, I was born on the 21st of June, which is the longest day of the year!<br /><br />Personally,
-                    I love striving towards being the best version of myself with work ethic, exercise, mindset and all the
-                    rest.<br /><br />Always being respectful and understanding makes me a great person to be around. At all
-                    times I'm approachable, being nervous to talk to me is unheard of.<br /><br />Some of my favourite
-                    hobbies consist of playing football/soccer, working out and writing.<br /><br />You can contact me on X:
-                </p>
-                <address> @Wrotebysam</address><br /><br />
-                <p>Or via email:</p>
-                <address> @sjtcopywriting2106@gmail.com</address>
+                <h2>ABOUT BIZHUB</h2>
+                <p>BizHub is a team collaboration platform specifically designed for businessmen that want to get things done good and fast.
+<br /><br />
+At Bizhub, we understand the challenges faced by today’s busy businessmen: lack of communication, wasting time on repetitive tasks, and finishing a big project can be a big hassle for a team leader.
+<br /><br />
+<b>That's why we built BizHub.</b>
+<br /><br />
+
+Our mission is to empower businesses with a powerful, intuitive collaboration platform that helps them do things faster, and better.</p>
             </div><img className="hidden" id="about-img" src={SamSuit} alt="SAM'S PIC" />
         </section>
     );
