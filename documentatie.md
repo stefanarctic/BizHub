@@ -19,3 +19,11 @@ Our mission is to empower businesses with a powerful, intuitive collaboration pl
 ![image](https://github.com/stefanarctic/BizHub/assets/87850525/961bfb14-6b43-4521-b927-bc386027dcc6)
 ![image](https://github.com/stefanarctic/BizHub/assets/87850525/445e3e2e-257b-420e-92b5-de8502400c84)
 
+## Future plans
+- Complete workspace customization
+- Support for document/image upload and server storing
+- Profile customization
+- Roles can be assigned to every person in the team, and each channel can be customized for only people with a specific role
+- Each workspace has an owner, which can set who is admin and who is not. Admins have access over every channel, can modify the workspace and assign new roles except for admin
+- Each user can attach a bank account to their profile. Instead of waiting for checks using external applications, admins can send payments to its users directly from the app using invoices
+- A task can be created in a specific channel, and each user can select the task as done and upload documents to it, simplifying task management and giving more time to businessmen to focus on other important things
