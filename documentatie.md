@@ -18,3 +18,4 @@ Our mission is to empower businesses with a powerful, intuitive collaboration pl
 ![image](https://github.com/stefanarctic/BizHub/assets/87850525/e41c0edc-532d-4d09-bd2c-75741c425e9d)
 ![image](https://github.com/stefanarctic/BizHub/assets/87850525/961bfb14-6b43-4521-b927-bc386027dcc6)
 ![image](https://github.com/stefanarctic/BizHub/assets/87850525/445e3e2e-257b-420e-92b5-de8502400c84)
+
