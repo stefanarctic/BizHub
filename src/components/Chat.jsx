@@ -13,6 +13,8 @@ export let navigateToLogin = () => {}
 
 export let callOnLogin = () => {}
 
+export let logOutGlobal = () => {}
+
 export const getUserFromDatabase = (userId, onFinish, onError) => {
     let user = null;
     const usersCollection = collection(db, 'users');
@@ -162,6 +164,12 @@ const Chat = () => {
             })
             .catch(err => console.error(err));
     }
+
+    useEffect(() => {
+        logOutGlobal = () => {
+            logOut();
+        }
+    }, []);
 
     /* --- Fetch Data from the database --- */
                     

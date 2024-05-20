@@ -39,7 +39,7 @@ const SectionSelector = ({ currentSelection, setCurrentSelection, user }) => {
                     onMouseEnter={() => setIsHoveringChat(true)}
                     onMouseLeave={() => setIsHoveringChat(false)}
                     onClick={() => setCurrentSelection(2)}
-                    alt="Chat" />
+                    alt="Chat" style={{'display': 'none'}} />
                 <img src={currentSelection === 3 ? Settings2 : (isHoveringSettings ? Settings2 : Settings1)}
                     onMouseEnter={() => setIsHoveringSettings(true)}
                     onMouseLeave={() => setIsHoveringSettings(false)}
