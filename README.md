@@ -1,6 +1,6 @@
 # BizHub
 
-BizHub is a team collaboration platform specifically designed for businessmen that want to get things done good and fast.
+### BizHub is a team collaboration platform specifically designed for businessmen that want to get things done good and fast.
 
 ## Technologies used:
 - React with Vite, SASS (frontend)
