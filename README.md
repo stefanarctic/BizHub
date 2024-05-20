@@ -7,3 +7,5 @@
 - Firebase (backend)
 - Github (source code hosting)
 - No external libraries
+- FlatIcon for icons
+- App background: Freepik
