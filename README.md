@@ -1,6 +1,5 @@
 # BizHub
 
-## About
 BizHub is a team collaboration platform specifically designed for businessmen that want to get things done good and fast.
 
 ## Technologies used:
