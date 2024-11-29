@@ -35,10 +35,7 @@ function App() {
                 <Main />
               </header>
               <About />
-              <Testimonials />
               <Services />
-              <FAQ />
-              <Call />
               <Footer />
             </>
           } />
