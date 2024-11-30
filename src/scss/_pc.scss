@@ -291,6 +291,11 @@ section#services {
             height: 100%;
             @include flex-position;
             background-color: transparent;
+
+            #productivity-icon {
+                width: 80%;
+                height: 80%;
+            }
         }
 
         h3,

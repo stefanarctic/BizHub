@@ -243,6 +243,12 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurren
         updateDoc(workspaceRef, currentWorkspace)
             .then(() => {
                 console.log('Updated workspace successfully');
+
+                // Scroll to the last message
+                // const messagesLocal = currentWorkspace?.channels[currentChannel]?.messages;
+                // messagesLocal[messagesLocal.length - 1].scrollIntoView({ behavior: 'smooth' });
+                messagesSectionRef.current.children[messagesSectionRef.current.children.length - 1].scrollIntoView({ behavior: 'smooth' });
+                console.log(`Messages local last`, messagesSectionRef.current.children[messagesSectionRef.current.children.length - 1]);
             })
             .catch(err => {
                 console.error(err);

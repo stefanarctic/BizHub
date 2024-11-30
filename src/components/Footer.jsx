@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <footer>
-            <h2>Sam's X Management</h2>
+            <h2>BizHub</h2>
             <h4>Copyright &copy;<span id="year"></span> All rights reserved</h4>
         </footer>
     );
