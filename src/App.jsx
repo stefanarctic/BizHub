@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import './scss/styles.scss';
+import './scss/root/styles.scss';
 
 import Navbar from './components/Navbar';
 import Main from './components/Main';

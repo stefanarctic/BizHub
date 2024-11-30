@@ -307,6 +307,7 @@ main {
         outline: 1px solid $debug-outline-color;
         display: flex;
         flex-direction: column;
+        position: relative;
         
         .channel-title {
             display: flex;
@@ -314,6 +315,8 @@ main {
             outline: 1px solid $debug-outline-color;
             border-bottom: 1px solid $border-color;
             padding-bottom: 5px;
+            height: 33px;
+            flex-shrink: 0;
             
             h1 {
                 margin-left: 20px;
@@ -327,7 +330,9 @@ main {
         .messages-section {
             flex: 1;
             // background-color: white;
-            max-height: 480px;
+            // max-height: 480px;
+            max-height: 70vh;
+            // height: 10%;
             overflow-y: auto;
             user-select: text;
             -webkit-user-select: text;
@@ -387,6 +392,10 @@ main {
         }
 
         .message-compose-section {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: space-between;
             // background-color: rgb(48, 48, 48);
@@ -394,6 +403,7 @@ main {
             padding: 20px;
             // border-top: 1px solid $border-color;
             outline: 1px solid $debug-outline-color;
+            flex-shrink: 0;
             // border-top: 1px solid $border-color;
 
             .send-msg {
@@ -404,6 +414,7 @@ main {
                 
                 .upload {
                     // background-color: black;
+
 
                     position: relative;
                     // display: inline-block;
