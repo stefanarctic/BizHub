@@ -1,0 +1,323 @@
+main {
+  flex: 1;
+  padding-top: 7rem;
+  -webkit-backdrop-filter: blur(4px) saturate(160%);
+          backdrop-filter: blur(4px) saturate(160%);
+}
+
+.chat {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+       user-select: none;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  border-radius: 20px;
+  padding: 10px;
+  flex: 1;
+  width: 95vw;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
+}
+.chat .workspace-section {
+  outline: 1px solid transparent;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.chat .workspace-section .workspace-title {
+  outline: 1px solid transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  padding-left: 20px;
+  position: relative;
+}
+.chat .workspace-section .workspace-title .text-and-arrow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  cursor: pointer;
+}
+.chat .workspace-section .workspace-title .text-and-arrow h1 {
+  font-size: 25px;
+  font-weight: bolder;
+}
+.chat .workspace-section .workspace-title .text-and-arrow img {
+  width: 30px;
+  height: 30px;
+  margin-top: 23px;
+}
+.chat .workspace-section .workspace-title .joined-workspaces-select {
+  position: absolute;
+  min-width: 65%;
+  padding: 10px;
+  display: none;
+  z-index: 1;
+  top: 60px;
+  background-color: rgba(83, 86, 101, 0.721);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+          backdrop-filter: blur(10px) saturate(180%);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.chat .workspace-section .workspace-title .joined-workspaces-select.show {
+  display: block;
+}
+.chat .workspace-section .workspace-title .joined-workspaces-select span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 20px;
+  border-radius: 10px;
+}
+.chat .workspace-section .workspace-title .joined-workspaces-select span:hover {
+  background-color: rgba(0, 0, 0, 0.284);
+  color: white;
+}
+.chat .workspace-section .list {
+  flex: 1;
+  display: flex;
+  justify-content: row;
+  gap: 20px;
+}
+.chat .workspace-section .list .sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.chat .workspace-section .list .sidebar .section-selector {
+  flex: 1;
+  outline: 1px solid transparent;
+  color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  margin-right: 0px;
+}
+.chat .workspace-section .list .sidebar .section-selector img {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  border-radius: 0px;
+  cursor: pointer;
+}
+.chat .workspace-section .list .sidebar .profile-picture {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  border-radius: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  cursor: pointer;
+}
+.chat .workspace-section .list .conversation-selector,
+.chat .workspace-section .list .dms,
+.chat .workspace-section .list .settings {
+  flex: 4;
+  outline: 1px solid transparent;
+}
+.chat .workspace-section .list .conversation-selector {
+  display: flex;
+  flex-direction: column;
+}
+.chat .workspace-section .list .conversation-selector .channels {
+  margin-top: 20px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.chat .workspace-section .list .conversation-selector .channels .channel {
+  font-weight: 525;
+  border-radius: 10px;
+  padding: 2px;
+  cursor: pointer;
+  width: 90%;
+  padding: 3px;
+}
+.chat .workspace-section .list .conversation-selector .channels .channel:hover {
+  background-color: rgba(57, 57, 57, 0.582);
+}
+.chat .workspace-section .list .conversation-selector .channels .channel.selected {
+  background-color: rgba(57, 57, 57, 0.582) !important;
+  color: white !important;
+}
+.chat .workspace-section .list .settings button {
+  all: unset;
+  margin-top: 5dvh;
+  margin-left: 10%;
+  --c: hsl(0, 0%, 100%);
+  /* the color*/
+  box-shadow: 0 0 0 0.1em inset var(--c);
+  --_g: linear-gradient(var(--primary-color) 0 0) no-repeat;
+  transition-duration: 0.2s !important;
+  font-family: system-ui, sans-serif;
+  font-size: 2.5rem;
+  cursor: pointer;
+  padding: 0.1em 0.6em;
+  padding-bottom: 10px;
+  font-weight: bold;
+  border: none;
+}
+.chat .workspace-section .list .settings button:hover {
+  --primary-color-fade: rgba(11, 255, 255, 0.373);
+  --btn-gradient: linear-gradient(to right, white 0%, var(--primary-color) 100%);
+  color: var(--primary-color);
+  background-color: var(--c);
+  transition-duration: 0.2s !important;
+}
+.chat .workspace-section .list .settings button:active {
+  color: var(--primary-color);
+  transition-duration: 0s;
+}
+.chat .workspace-section .list,
+.chat .messages {
+  padding-top: 20px;
+}
+.chat .messages {
+  flex: 2;
+  outline: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.chat .messages .channel-title {
+  display: flex;
+  align-items: center;
+  outline: 1px solid transparent;
+  border-bottom: 1px solid white;
+  padding-bottom: 5px;
+  height: 33px;
+  flex-shrink: 0;
+}
+.chat .messages .channel-title h1 {
+  margin-left: 20px;
+  font-size: 25px;
+  font-weight: bolder;
+  padding-top: 0;
+  margin-top: 0;
+}
+.chat .messages .messages-section {
+  flex: 1;
+  max-height: 65vh;
+  overflow-y: auto;
+  -moz-user-select: text;
+       user-select: text;
+  -webkit-user-select: text;
+}
+.chat .messages .messages-section .message {
+  width: 100%;
+  min-height: 70px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.chat .messages .messages-section .message .texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding-left: 10px;
+}
+.chat .messages .messages-section .message .texts h1 {
+  all: unset;
+  font-size: 18px;
+  font-weight: 450;
+  padding-top: 0;
+  margin-top: 0;
+}
+.chat .messages .messages-section .message .texts p {
+  font-weight: 300;
+}
+.chat .messages .messages-section .message img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.chat .messages .messages-section .message:hover {
+  background-color: rgba(88, 88, 88, 0.147);
+}
+.chat .messages .message-compose-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  outline: 1px solid transparent;
+  flex-shrink: 0;
+}
+.chat .messages .message-compose-section .send-msg {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex: 1;
+}
+.chat .messages .message-compose-section .send-msg .upload {
+  position: relative;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-select {
+  position: absolute;
+  min-width: 160px;
+  padding: 10px;
+  display: none;
+  z-index: 1;
+  bottom: 50px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-select.show {
+  display: block;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-select span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px;
+  color: black;
+  font-size: 20px;
+  border-radius: 10px;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-select span:hover {
+  background-color: black;
+  color: white;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-btn {
+  border-radius: 50%;
+  transition: 0.5s;
+}
+.chat .messages .message-compose-section .send-msg .upload .upload-btn.show {
+  rotate: 135deg;
+  transition: 0.5s;
+}
+.chat .messages .message-compose-section .send-msg input {
+  all: unset;
+  width: 90%;
+  background-color: transparent;
+  color: white;
+  font-size: 18px;
+}
+.chat .messages .message-compose-section img,
+.chat .messages .message-compose-section .send-msg img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.chat .no-workspace {
+  flex: 1;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.chat .no-workspace h1 {
+  font-size: 3rem;
+}

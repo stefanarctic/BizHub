@@ -125,6 +125,15 @@ const Chat = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const messagesSection = document.querySelector("#home > main > div > div.messages > div.messages-section");
+        if(!messagesSection)
+            return;
+        console.log('Fixed messages height')
+        const ratio = window.innerHeight / messagesSection.clientHeight;
+        messagesSection.style.height = window.innerHeight / ratio;
+    });
+
     // Check if user is logged in, else redirect to login page
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, user => {
