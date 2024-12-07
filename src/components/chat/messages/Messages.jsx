@@ -366,7 +366,7 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurren
                                 }
 
                                 return imagePath;
-                            })()} />
+                            })()} referrerPolicy="no-referrer" />
                             <div className="texts">
                                 <h1>{(() => {
                                     let userName = '';
