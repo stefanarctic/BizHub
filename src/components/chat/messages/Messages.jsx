@@ -325,6 +325,11 @@ export const Messages = ( { user, setUser, loggedIn, currentWorkspace, setCurren
         setOnChannelUpdate(localOnChannelUpdate);
     }, []);
 
+    useEffect(() => {
+        // Messages section fix
+        messagesSectionRef.current.style.height = window.innerHeight / 2 + "px";
+    });
+
     return (
         <div className="messages">
         {loggedIn  ? (

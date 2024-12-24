@@ -708,6 +708,9 @@ const Chat = () => {
     // });
 
     useEffect(() => {
+        
+        // console.log('yes')
+        // console.log(document.querySelector("#home > main > div").clientHeight);
         // Set button as selected
         // document.getElementsByClassName('channels')[0].children[0].className = 'channel selected';
         setTimeout(() => {
@@ -717,6 +720,10 @@ const Chat = () => {
             channelsParentRef.current.children.item(0).className = 'channel selected';
             console.log(`CPR: `, channelsParentRef.current.children.item(0).className);
         }, 1000);
+
+      console.log(document.querySelector("#home > main > div").clientHeight);
+
+
     }, []);
 
     return (
@@ -739,6 +746,8 @@ const Chat = () => {
             </main>
         </>
     );
+
+
 }
 
 export default Chat;
