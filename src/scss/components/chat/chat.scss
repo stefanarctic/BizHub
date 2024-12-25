@@ -20,6 +20,7 @@ main {
     flex-direction: row;
     border-radius: 20px;
     padding: 10px;
+    overflow: hidden;
     // background-color: transparent;
     flex: 1;
     width: 95vw;
@@ -334,8 +335,9 @@ main {
             // background-color: red;
             // background-color: white;
             // max-height: 480px;
-            // max-height: 70vh;
-            max-height: 85%;
+            // height: 23vh;
+            margin-bottom: 10%;
+            // max-height: 85%;
             // height: 10%;
             overflow-y: auto;
             user-select: text;
