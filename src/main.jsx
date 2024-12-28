@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './features/users.js'
+import currentUserReducer from './features/currentUser.js';
 import { Provider } from 'react-redux'
 
 const store = configureStore({
   reducer: {
-    users: userReducer
+    users: userReducer,
+    currentUser: currentUserReducer
   }
 });
 
