@@ -6,22 +6,8 @@ import { addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import initScrollAnimation from "./Util/ScrollAnimation";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../features/currentUser";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
-export const checkIfUserExists = async uid => {
-    try {
-        const q = query(usersCollection, where('uid', '==', uid));
-        const querySnapshot = await getDocs(q);
-
-        if(!querySnapshot.empty)
-            return querySnapshot.docs[0];
-        else
-            return null;
-    } catch(error) {
-        console.error("Error checking if user exists: ", error);
-        return null;
-    }
-}
 
 export let navigateGlobal = () => {
     console.log('navigate doesnt work');
@@ -31,23 +17,12 @@ getAuthGlobal = () => {
     return auth;
 }
 
-// export const logOut = async () => {
-//     try {
-//         await signOut(auth);
-//         dispatch(setCurrentUser({}));
-//         navigate('/login');
-//         console.log('logged out succesfully', auth.currentUser);
-//     } catch(error) {
-//         console.error('Error in logging out', error);
-//     }
-// }
-
 const Auth = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { logIn } = useAuth();
+    const { logIn, getUserFromDatabase } = useAuth();
 
     const signInWithGoogle = async () => {
 
@@ -55,7 +30,7 @@ const Auth = () => {
         console.log(`Signed in with Google as ${auth.currentUser.displayName}`);
 
         // If user doesn't exist in the database, add them (log in or register the account)
-        let userDocument = await checkIfUserExists(auth.currentUser.uid);
+        let userDocument = await getUserFromDatabase(auth.currentUser.uid);
         if(!userDocument)
         {
             try {
@@ -75,7 +50,8 @@ const Auth = () => {
         }
         else
         {
-            dispatch(setCurrentUser(userDocument.data()));
+            console.log('dispatched')
+            // dispatch(setCurrentUser(userDocument.data()));
         }
 
         navigate('/app');

@@ -1,7 +1,7 @@
 
-const DMs = ({ user, setUser }) => {
+const DMs = () => {
     return (
-        <div className="dms">DMs</div>
+        <></>
     );
 }
  

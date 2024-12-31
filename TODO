@@ -1,2 +1,4 @@
-- Implement workspace retrieval
+- Implement message sending
+- Implement proper workspace changing
+- Implement localStorage for currentWorkspace
 - Implement extension blocking

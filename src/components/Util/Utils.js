@@ -34,4 +34,21 @@ export const convertToUtcTime = localDate => {
     const adjustedHours = (utcHours + 24) % 24;
   
     return new Date(localDate.getFullYear(), localDate.getMonth(), localDate.getDate(), adjustedHours, utcMinutes, 0, 0); // Create a new Date object with adjusted time
-}  
+}
+
+export const asyncify = callback => { (async () => await callback())() }
+
+export const asyncifyWithReturn = callback => {
+    const returnValue = ((async () => await callback())());
+    return returnValue;
+}
+
+const Utils = {
+    generateRandomId: generateRandomId,
+    convertToLocalTime: convertToLocalTime,
+    convertToUtcTime: convertToUtcTime,
+    asyncify: asyncify,
+    asyncifyWithReturn: asyncifyWithReturn
+};
+
+export default Utils;

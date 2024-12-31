@@ -29,7 +29,7 @@ main {
     // box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.3);
     filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
 
-    .logged-in, .logged-out {
+    .logged-in, .logged-out, .loading {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -344,7 +344,7 @@ main {
             // background-color: white;
             // max-height: 480px;
             // height: 23vh;
-            margin-bottom: 10%;
+            margin-bottom: 8%;
             // max-height: 85%;
             // height: 10%;
             overflow-y: auto;

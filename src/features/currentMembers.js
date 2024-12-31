@@ -2,26 +2,27 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getDocs } from "firebase/firestore";
 import { usersCollection } from "../firebase/FirebaseSetup";
 
-/* --- DEPRECATED --- */
-
-export const userSlice = createSlice({
-    name: 'users',
+export const currentMembersSlice = createSlice({
+    name: 'currentMembers',
     initialState: {
         value: []
     },
     reducers: {
-        setUsers: (state, action) => {
+        setCurrentMembers: (state, action) => {
             state.value = action.payload;
         }
     }
 });
 
-export const getUsers = async () => {
+export const getCurrentMembers = async memberIds => {
     const userSnapshot = await getDocs(usersCollection);
     const users = userSnapshot.docs.map(doc => doc.data());
-    return users;
+
+    const members = users.filter(user => memberIds.includes(user.uid));
+
+    return members;
 }
 
-export const { setUsers } = userSlice.actions;
+export const { setCurrentMembers } = currentMembersSlice.actions;
 
-export default userSlice.reducer;
+export default currentMembersSlice.reducer;

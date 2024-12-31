@@ -1,10 +1,11 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { auth } from '../firebase/FirebaseSetup';
+import { auth, usersCollection } from '../firebase/FirebaseSetup';
 import { setCurrentUser } from '../features/currentUser';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { getDocs, query, where } from 'firebase/firestore';
 
-export const useAuth = () => {
+const useAuth = () => {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -26,9 +27,26 @@ export const useAuth = () => {
         }
     }
 
+    const getUserFromDatabase = async uid => {
+        try {
+            const q = query(usersCollection, where('uid', '==', uid));
+            const querySnapshot = await getDocs(q);
+    
+            if(!querySnapshot.empty)
+                return querySnapshot.docs[0];
+            else
+                return null;
+        } catch(error) {
+            console.error("Error checking if user exists: ", error);
+            return null;
+        }
+    }
+
     const getProvider = () => {
         return provider;
     }
 
-    return { logIn, logOut, getProvider };
+    return { logIn, logOut, getUserFromDatabase, getProvider };
 };
+
+export default useAuth;
