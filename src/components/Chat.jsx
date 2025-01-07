@@ -1,16 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 // import { getUsers, setUsers } from "../features/users";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { auth, workspacesCollection } from "../firebase/FirebaseSetup";
 import { setCurrentUser } from "../features/currentUser";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc, query } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, query } from "firebase/firestore";
 import { setJoinedWorkspaces } from "../features/joinedWorkspaces";
 import { setCurrentWorkspace } from "../features/currentWorkspace";
 import WorkspaceSection from "./chat/workspacesection/WorkspaceSection";
 import Messages from "./chat/messages/Messages";
 import { onAuthStateChanged } from "firebase/auth";
+import Utils from "./Util/Utils";
 
 const Chat = () => {
 
@@ -24,6 +25,8 @@ const Chat = () => {
 
     const [loggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+
+    const globalUnsubscribes = useRef([]);
     // const [initiatedData, setInitiatedData] = useState(false);
     // const [userFound, setUserFound] = useState(false);
 
@@ -56,10 +59,10 @@ const Chat = () => {
                 const workspaceData = workspaceDocument.data();
 
                 for (const channel of workspaceData.channels) {
-                    channel.createdAt = channel.createdAt.toDate().getTime();
+                    channel.createdAt = channel.createdAt.seconds;
 
                     for (const message of channel.messages) {
-                        message.createdAt = message.createdAt.toDate().getTime();
+                        message.createdAt = message.createdAt.seconds;
                     }
                 }
 
@@ -142,22 +145,59 @@ const Chat = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async user => {
-            if(user)
+            if (user)
                 await setLoggedInUser();
             else
                 console.log('Current user null');
-            
+
             setIsLoading(false);
         });
 
         return unsubscribe;
     }, []);
 
-    document.onkeydown = e => {
+    useEffect(() => {
+        if (!isLoading)
+        {
+            // Auto refreshing joinedWorkspaces and users whenever it changed in the database
+            // Unsubscribe when closing tab or logging out
+            // Each workspace needs to have the same Firestore id as it's property id
+            const unsubscribes = [];
+            const joinedWorkspacesCopy = Utils.deepCopy(joinedWorkspaces);
+            let onWorkspaceChange = () => {}
+            joinedWorkspacesCopy.map(workspace => {
+                const workspaceRef = doc(workspacesCollection, workspace.id);
+                let workspaceData = null;
+
+                const unsubscribe = onSnapshot(workspaceRef, workspaceSnapshot => {
+                    if (!workspaceSnapshot.exists()) {
+                        console.error(`Workspace with id ${workspace.id} doesn't exist in the database`);
+                        return;
+                    }
+
+                    workspaceData = workspaceSnapshot.data();
+                    onWorkspaceChange();
+                });
+
+                unsubscribes.push(unsubscribe);
+
+                if(!workspaceData)
+                    return workspace;
+
+                return workspaceData;
+            });
+
+            onWorkspaceChange = () => {
+
+            }
+        }
+    }, [isLoading]);
+
+    document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             (async () => await logOut())();
         }
-    }
+    });
 
     return (
         <>
@@ -166,10 +206,10 @@ const Chat = () => {
             </nav>
             <main>
                 <div className="chat">
-                    {isLoading ? ( // Display loading indicator while checking
+                    {isLoading ? (
                         <div className="loading"></div>
                     ) : (
-                        loggedIn ? ( // Show content only if user is logged in
+                        loggedIn ? (
                             <>
                                 <WorkspaceSection />
                                 <Messages />

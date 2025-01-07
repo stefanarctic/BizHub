@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
-import { auth, usersCollection } from '../firebase/FirebaseSetup';
+import { auth, usersCollection, workspacesCollection } from '../firebase/FirebaseSetup';
 import { setCurrentUser } from '../features/currentUser';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

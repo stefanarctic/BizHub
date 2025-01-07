@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 
 export const generateRandomId = () => {
     const randomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -43,12 +44,51 @@ export const asyncifyWithReturn = callback => {
     return returnValue;
 }
 
+export const convertTimestampToSeconds = workspace => {
+    const workspaceCopy = JSON.parse(JSON.stringify(workspace));
+    console.log('Looking to convert workspace dates');
+    console.log(workspaceCopy);
+
+    for (const channel of workspaceCopy.channels) {
+        channel.createdAt = channel.createdAt.seconds;
+
+        for (const message of channel.messages) {
+            message.createdAt = message.createdAt.seconds;
+        }
+    }
+
+    return workspaceCopy;
+}
+
+export const convertSecondsToTimestamp = workspace => {
+    const workspaceCopy = JSON.parse(JSON.stringify(workspace));
+    console.log('Looking to convert workspace dates');
+    console.log(workspaceCopy);
+
+    for(const channel of workspaceCopy.channels) {
+        channel.createdAt = Timestamp.fromMillis(channel.createdAt * 1000);
+
+        for(const message of channel.messages) {
+            message.createdAt = Timestamp.fromMillis(message.createdAt * 1000);
+        }
+    }
+
+    return workspaceCopy;
+}
+
+export const deepCopy = object => {
+    return JSON.parse(JSON.stringify(currentWorkspace));
+}
+
 const Utils = {
     generateRandomId: generateRandomId,
     convertToLocalTime: convertToLocalTime,
     convertToUtcTime: convertToUtcTime,
     asyncify: asyncify,
-    asyncifyWithReturn: asyncifyWithReturn
+    asyncifyWithReturn: asyncifyWithReturn,
+    convertTimestampToSeconds: convertTimestampToSeconds,
+    convertSecondsToTimestamp: convertSecondsToTimestamp,
+    deepCopy: deepCopy,
 };
 
 export default Utils;

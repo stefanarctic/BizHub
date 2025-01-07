@@ -1,4 +1,6 @@
-- Implement message sending
+- Implement auto refreshing
 - Implement proper workspace changing
+- Clean code
 - Implement localStorage for currentWorkspace
 - Implement extension blocking
+- Implement react-virtualized or react-window

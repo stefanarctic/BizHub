@@ -53,7 +53,7 @@ const SectionSelector = () => {
                     onClick={() => dispatch(setCurrentSection(2))}
                     alt="Settings" />
             </div>
-            <img src={photoURL} className="profile-picture" />
+            <img src={photoURL} className="profile-picture" referrerPolicy="no-referrer" />
         </div>
     );
 }
