@@ -25,8 +25,9 @@ const Chat = () => {
 
     const [loggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [hasInitialized, setHasInitialized] = useState(false);
 
-    const globalUnsubscribes = useRef([]);
+    const unsubscribes = useRef([]);
     // const [initiatedData, setInitiatedData] = useState(false);
     // const [userFound, setUserFound] = useState(false);
 
@@ -71,6 +72,10 @@ const Chat = () => {
         }
 
         dispatch(setJoinedWorkspaces(joinedWorkspaces));
+    }
+
+    const updateJoinedWOrkspacesWithData = async newWorkspace => {
+
     }
 
     /* --- Global functions --- */
@@ -157,41 +162,56 @@ const Chat = () => {
     }, []);
 
     useEffect(() => {
-        if (!isLoading)
+        if(isLoggedIn() && Object.keys(joinedWorkspaces).length !== 0 && Object.keys(currentWorkspace).length !== 0)
+        {
+            setHasInitialized(true);
+        }
+    }, [currentUser, joinedWorkspaces, currentWorkspace]);
+
+    useEffect(() => {
+        if (hasInitialized)
         {
             // Auto refreshing joinedWorkspaces and users whenever it changed in the database
             // Unsubscribe when closing tab or logging out
             // Each workspace needs to have the same Firestore id as it's property id
-            const unsubscribes = [];
-            const joinedWorkspacesCopy = Utils.deepCopy(joinedWorkspaces);
-            let onWorkspaceChange = () => {}
-            joinedWorkspacesCopy.map(workspace => {
+            console.log('Not loading anymore');
+            joinedWorkspaces.map(workspace => {
                 const workspaceRef = doc(workspacesCollection, workspace.id);
-                let workspaceData = null;
 
                 const unsubscribe = onSnapshot(workspaceRef, workspaceSnapshot => {
-                    if (!workspaceSnapshot.exists()) {
+                    if(!workspaceSnapshot.exists())
+                    {
                         console.error(`Workspace with id ${workspace.id} doesn't exist in the database`);
                         return;
                     }
 
-                    workspaceData = workspaceSnapshot.data();
-                    onWorkspaceChange();
+                    updateJoinedWorkspaces();
                 });
+                console.log('Setup listener for workspace ', workspace.id);
 
-                unsubscribes.push(unsubscribe);
-
-                if(!workspaceData)
-                    return workspace;
-
-                return workspaceData;
+                unsubscribes.current.push(unsubscribe);
             });
 
-            onWorkspaceChange = () => {
-
-            }
+            window.addEventListener('beforeunload', e => {
+                for(const unsubscribe of unsubscribes.current)
+                {
+                    unsubscribe();
+                }
+                unsubscribes.current = [];
+                console.log('Unsubscribed');
+            });
         }
-    }, [isLoading]);
+    }, [hasInitialized]);
+
+    useEffect(() => {
+        return () => {
+            for(const unsubscribe of unsubscribes.current)
+            {
+                unsubscribe();
+            }
+            unsubscribes.current = [];
+        }
+    }, []); // Make sure it gets unsubscribed when component unmounts
 
     document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {

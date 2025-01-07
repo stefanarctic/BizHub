@@ -170,7 +170,7 @@ const Messages = () => {
         console.log('Current workspace: ', currentWorkspace);
 
         // Update on the frontend
-        // dispatch(setCurrentWorkspace(currentWorkspaceCopy));
+        dispatch(setCurrentWorkspace(currentWorkspaceCopy));
 
 
         // Update on the backend
